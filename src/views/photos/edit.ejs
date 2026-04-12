@@ -1,0 +1,56 @@
+<%- include('../partials/header', { title: title, inboxCount: inboxCount }) %>
+
+<div class="page-header">
+  <h1>Edit Photo</h1>
+  <a href="/photos/<%= photo.id %>" class="btn btn-secondary">← Back</a>
+</div>
+
+<form action="/photos/<%= photo.id %>/edit" method="POST" class="form">
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" value="<%= photo.title || '' %>">
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="3"><%= photo.description || '' %></textarea>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="date_taken">Date Taken</label>
+      <input type="text" id="date_taken" name="date_taken" value="<%= photo.date_taken || '' %>" placeholder="YYYY-MM-DD">
+    </div>
+    <div class="form-group">
+      <label>
+        <input type="checkbox" name="date_approximate" value="1" <%= photo.date_approximate ? 'checked' : '' %>>
+        Approximate date
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="location">Location</label>
+    <input type="text" id="location" name="location" value="<%= photo.location || '' %>">
+  </div>
+  <div class="form-group">
+    <label for="keywords">Keywords</label>
+    <input type="text" id="keywords" name="keywords" value="<%= photo.keywords || '' %>" placeholder="comma-separated">
+  </div>
+  <div class="form-group">
+    <label for="source_type">Source Type</label>
+    <select id="source_type" name="source_type">
+      <option value="">-- Select --</option>
+      <option value="print" <%= photo.source_type === 'print' ? 'selected' : '' %>>Print</option>
+      <option value="scan" <%= photo.source_type === 'scan' ? 'selected' : '' %>>Scan</option>
+      <option value="digital" <%= photo.source_type === 'digital' ? 'selected' : '' %>>Digital</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="group_id">Group ID</label>
+    <input type="number" id="group_id" name="group_id" value="<%= photo.group_id || '' %>">
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="/photos/<%= photo.id %>" class="btn btn-secondary">Cancel</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,39 @@
+<%- include('../partials/header', { title: title, inboxCount: inboxCount }) %>
+
+<div class="page-header">
+  <h1>Photos</h1>
+  <a href="/photos/upload" class="btn btn-primary">+ Upload</a>
+</div>
+
+<div class="filter-tabs">
+  <a href="/photos" class="tab <%= status === '' ? 'active' : '' %>">All</a>
+  <a href="/photos?status=uploaded" class="tab <%= status === 'uploaded' ? 'active' : '' %>">Uploaded</a>
+  <a href="/photos?status=processing" class="tab <%= status === 'processing' ? 'active' : '' %>">Processing</a>
+  <a href="/photos?status=needs_review" class="tab <%= status === 'needs_review' ? 'active' : '' %>">Needs Review</a>
+  <a href="/photos?status=reviewed" class="tab <%= status === 'reviewed' ? 'active' : '' %>">Reviewed</a>
+  <a href="/photos?status=failed" class="tab <%= status === 'failed' ? 'active' : '' %>">Failed</a>
+</div>
+
+<% if (photos.length === 0) { %>
+  <div class="empty-state"><p>No photos found.</p></div>
+<% } else { %>
+  <div class="photo-grid">
+    <% photos.forEach(function(photo) { %>
+      <a href="/photos/<%= photo.id %>" class="photo-card">
+        <div class="photo-thumb">
+          <% if (photo.clean_path) { %>
+            <img src="/processed/<%= require('path').basename(photo.clean_path) %>" alt="<%= photo.title || photo.filename %>">
+          <% } else { %>
+            <img src="/uploads/<%= photo.filename %>" alt="<%= photo.title || photo.filename %>">
+          <% } %>
+        </div>
+        <div class="photo-card-info">
+          <p class="photo-title"><%= photo.title || photo.filename %></p>
+          <span class="status-badge status-<%= photo.status %>"><%= photo.status.replace('_', ' ') %></span>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>

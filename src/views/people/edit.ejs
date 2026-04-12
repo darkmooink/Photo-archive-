@@ -1,0 +1,23 @@
+<%- include('../partials/header', { title: title, inboxCount: inboxCount }) %>
+
+<div class="page-header">
+  <h1><%= person ? 'Edit Person' : 'New Person' %></h1>
+  <% if (person) { %><a href="/people/<%= person.id %>" class="btn btn-secondary">← Back</a><% } %>
+</div>
+
+<form action="<%= person ? '/people/' + person.id + '/edit' : '/people/new' %>" method="POST" class="form">
+  <div class="form-group">
+    <label for="name">Name *</label>
+    <input type="text" id="name" name="name" value="<%= person ? person.name : '' %>" required>
+  </div>
+  <div class="form-group">
+    <label for="notes">Notes</label>
+    <textarea id="notes" name="notes" rows="3"><%= person ? (person.notes || '') : '' %></textarea>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%= person ? 'Save' : 'Create' %></button>
+    <a href="/people" class="btn btn-secondary">Cancel</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>

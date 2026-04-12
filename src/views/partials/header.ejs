@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' – Photo Archive' : 'Photo Archive' %></title>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<nav class="navbar">
+  <a class="nav-brand" href="/">📷 Photo Archive</a>
+  <ul class="nav-links">
+    <li>
+      <a href="/">
+        Inbox
+        <% if (typeof inboxCount !== 'undefined' && inboxCount > 0) { %>
+          <span class="badge"><%= inboxCount %></span>
+        <% } %>
+      </a>
+    </li>
+    <li><a href="/photos">Photos</a></li>
+    <li><a href="/people">People</a></li>
+  </ul>
+</nav>
+<main class="container">

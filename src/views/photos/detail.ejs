@@ -1,0 +1,129 @@
+<%- include('../partials/header', { title: title, inboxCount: inboxCount }) %>
+
+<div class="page-header">
+  <h1><%= photo.title || photo.filename %></h1>
+  <div class="header-actions">
+    <a href="/photos/<%= photo.id %>/edit" class="btn btn-secondary">Edit Metadata</a>
+    <% if (photo.status === 'needs_review') { %>
+      <form action="/photos/<%= photo.id %>/review" method="POST" style="display:inline">
+        <button class="btn btn-success">✓ Mark Reviewed</button>
+      </form>
+    <% } %>
+    <form action="/photos/<%= photo.id %>/reprocess" method="POST" style="display:inline">
+      <button class="btn btn-secondary">↺ Reprocess</button>
+    </form>
+    <form action="/photos/<%= photo.id %>?_method=DELETE" method="POST" style="display:inline"
+          onsubmit="return confirm('Delete this photo?')">
+      <button class="btn btn-danger">🗑 Delete</button>
+    </form>
+  </div>
+</div>
+
+<div class="detail-layout">
+  <div class="detail-images">
+    <div class="image-tabs">
+      <button class="tab-btn active" onclick="showTab('original', event)">Original</button>
+      <% if (photo.clean_path) { %><button class="tab-btn" onclick="showTab('clean', event)">Clean</button><% } %>
+      <% if (photo.review_path) { %><button class="tab-btn" onclick="showTab('review', event)">Review</button><% } %>
+      <% if (photo.labeled_path) { %><button class="tab-btn" onclick="showTab('labeled', event)">Labeled</button><% } %>
+    </div>
+
+    <div id="tab-original" class="tab-pane active">
+      <div class="corner-container" id="cornerContainer">
+        <img id="originalImg" src="/uploads/<%= photo.filename %>" alt="Original" style="max-width:100%">
+        <div class="corner-handle" id="h0" data-idx="0"></div>
+        <div class="corner-handle" id="h1" data-idx="1"></div>
+        <div class="corner-handle" id="h2" data-idx="2"></div>
+        <div class="corner-handle" id="h3" data-idx="3"></div>
+      </div>
+      <div class="corner-controls">
+        <input type="hidden" id="cornersInput" value="<%= photo.corners || '' %>">
+        <button class="btn btn-secondary" onclick="saveCorners()">Save Corner Adjustments</button>
+        <span id="save-status" style="display:none;margin-left:1rem;color:green;font-weight:bold;"></span>
+        <button class="btn btn-secondary" onclick="resetCorners()">Reset</button>
+      </div>
+    </div>
+
+    <% if (photo.clean_path) { %>
+    <div id="tab-clean" class="tab-pane">
+      <img src="/processed/<%= basename(photo.clean_path) %>" alt="Clean" style="max-width:100%">
+    </div>
+    <% } %>
+
+    <% if (photo.review_path) { %>
+    <div id="tab-review" class="tab-pane">
+      <img src="/processed/<%= basename(photo.review_path) %>" alt="Review" style="max-width:100%">
+    </div>
+    <% } %>
+
+    <% if (photo.labeled_path) { %>
+    <div id="tab-labeled" class="tab-pane">
+      <img src="/processed/<%= basename(photo.labeled_path) %>" alt="Labeled" style="max-width:100%">
+    </div>
+    <% } %>
+  </div>
+
+  <div class="detail-meta">
+    <div class="meta-section">
+      <h3>Status</h3>
+      <span class="status-badge status-<%= photo.status %>"><%= photo.status.replace('_', ' ') %></span>
+      <% if (photo.error_message) { %>
+        <p class="error-msg"><%= photo.error_message %></p>
+      <% } %>
+    </div>
+
+    <div class="meta-section">
+      <h3>Metadata</h3>
+      <dl class="meta-list">
+        <% if (photo.date_taken) { %>
+          <dt>Date</dt><dd><%= photo.date_taken %><%= photo.date_approximate ? ' (approx)' : '' %></dd>
+        <% } %>
+        <% if (photo.location) { %>
+          <dt>Location</dt><dd><%= photo.location %></dd>
+        <% } %>
+        <% if (photo.source_type) { %>
+          <dt>Source</dt><dd><%= photo.source_type %></dd>
+        <% } %>
+        <% if (photo.description) { %>
+          <dt>Description</dt><dd><%= photo.description %></dd>
+        <% } %>
+        <% if (photo.keywords) { %>
+          <dt>Keywords</dt><dd><%= photo.keywords %></dd>
+        <% } %>
+      </dl>
+    </div>
+
+    <div class="meta-section" id="peopleSection">
+      <h3>People</h3>
+      <div id="peopleList">
+        <% photo.people.forEach(function(p) { %>
+          <span class="person-tag">
+            <a href="/people/<%= p.person_id %>"><%= p.name %></a>
+            <button class="tag-remove" onclick="removeTag(<%= photo.id %>, <%= p.person_id %>)">×</button>
+          </span>
+        <% }) %>
+      </div>
+      <div class="tag-add-form">
+        <select id="personSelect">
+          <option value="">-- Add person --</option>
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="addTag(<%= photo.id %>)">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PHOTO_ID = <%= photo.id %>;
+const INITIAL_CORNERS = <%- photo.corners ? photo.corners : 'null' %>;
+
+function showTab(name, event) {
+  document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+<script src="/js/review.js"></script>
+
+<%- include('../partials/footer') %>
