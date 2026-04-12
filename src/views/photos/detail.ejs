@@ -39,6 +39,7 @@
       <div class="corner-controls">
         <input type="hidden" id="cornersInput" value="<%= photo.corners || '' %>">
         <button class="btn btn-secondary" onclick="saveCorners()">Save Corner Adjustments</button>
+        <span id="save-status" style="display:none;margin-left:1rem;color:green;font-weight:bold;"></span>
         <button class="btn btn-secondary" onclick="resetCorners()">Reset</button>
       </div>
     </div>

@@ -134,8 +134,9 @@
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data.ok) {
-          alert('Corners saved. Photo will be reprocessed.');
-          location.reload();
+          var banner = document.getElementById('save-status');
+          if (banner) { banner.textContent = 'Corners saved — reprocessing queued.'; banner.style.display = 'block'; }
+          setTimeout(function () { location.reload(); }, 1500);
         }
       })
       .catch(function (err) { console.error(err); });

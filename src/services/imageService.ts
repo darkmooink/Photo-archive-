@@ -31,7 +31,9 @@ function buildMetadataSvg(photo: Photo, width: number, includePeople: string[]):
   if (!lines.length) lines.push('No metadata');
 
   const svgHeight = lines.length * lineHeight + padding * 2;
-  const escapeLine = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const escapeLine = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+     .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 
   const textElements = lines.map((l, i) =>
     `<text x="${padding}" y="${padding + (i + 1) * lineHeight}" font-family="monospace" font-size="14" fill="#222">${escapeLine(l)}</text>`
