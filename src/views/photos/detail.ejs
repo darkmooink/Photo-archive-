@@ -46,19 +46,19 @@
 
     <% if (photo.clean_path) { %>
     <div id="tab-clean" class="tab-pane">
-      <img src="/processed/<%= require('path').basename(photo.clean_path) %>" alt="Clean" style="max-width:100%">
+      <img src="/processed/<%= basename(photo.clean_path) %>" alt="Clean" style="max-width:100%">
     </div>
     <% } %>
 
     <% if (photo.review_path) { %>
     <div id="tab-review" class="tab-pane">
-      <img src="/processed/<%= require('path').basename(photo.review_path) %>" alt="Review" style="max-width:100%">
+      <img src="/processed/<%= basename(photo.review_path) %>" alt="Review" style="max-width:100%">
     </div>
     <% } %>
 
     <% if (photo.labeled_path) { %>
     <div id="tab-labeled" class="tab-pane">
-      <img src="/processed/<%= require('path').basename(photo.labeled_path) %>" alt="Labeled" style="max-width:100%">
+      <img src="/processed/<%= basename(photo.labeled_path) %>" alt="Labeled" style="max-width:100%">
     </div>
     <% } %>
   </div>

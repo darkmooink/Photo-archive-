@@ -31,7 +31,7 @@ const router = Router();
 
 router.get('/', listPhotos);
 router.get('/upload', getUploadForm);
-router.post('/upload', upload.single('photo'), handleUpload);
+router.post('/upload', upload.array('photos', 50), handleUpload);
 router.get('/:id', getPhotoDetail);
 router.get('/:id/edit', getEditForm);
 router.post('/:id/edit', saveEdit);

@@ -19,13 +19,14 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.use('/processed', express.static(path.join(process.cwd(), 'data', 'processed')));
 
-// Make inboxCount available to all views
+// Make inboxCount and path helpers available to all views
 app.use((_req: Request, res: Response, next: NextFunction) => {
   try {
     res.locals['inboxCount'] = getInboxCount();
   } catch {
     res.locals['inboxCount'] = 0;
   }
+  res.locals['basename'] = path.basename;
   next();
 });
 

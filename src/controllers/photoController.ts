@@ -28,20 +28,30 @@ export function getUploadForm(req: Request, res: Response): void {
 }
 
 export function handleUpload(req: Request, res: Response): void {
-  if (!req.file) {
-    res.render('photos/upload', { title: 'Upload Photo', error: 'No file uploaded' });
+  const files = req.files as Express.Multer.File[] | undefined;
+  if (!files || files.length === 0) {
+    res.render('photos/upload', { title: 'Upload Photo', error: 'No files uploaded' });
     return;
   }
-  const relativePath = path.join('uploads', req.file.filename);
-  const photo = createPhoto({
-    filename: req.file.filename,
-    original_path: relativePath,
-    status: 'uploaded',
-    source_type: (req.body['source_type'] as Photo['source_type']) ?? null,
-    title: (req.body['title'] as string) || null,
-  });
-  enqueue(photo.id);
-  res.redirect(`/photos/${photo.id}`);
+  const created: number[] = [];
+  for (const file of files) {
+    const relativePath = path.join('uploads', file.filename);
+    const photo = createPhoto({
+      filename: file.filename,
+      original_path: relativePath,
+      status: 'uploaded',
+      source_type: (req.body['source_type'] as Photo['source_type']) ?? null,
+      title: files.length === 1 ? ((req.body['title'] as string) || null) : null,
+    });
+    enqueue(photo.id);
+    created.push(photo.id);
+  }
+  // Single upload → go straight to detail; batch → go to photo list
+  if (created.length === 1) {
+    res.redirect(`/photos/${created[0]}`);
+  } else {
+    res.redirect('/photos?status=uploaded');
+  }
 }
 
 export function getPhotoDetail(req: Request, res: Response): void {
