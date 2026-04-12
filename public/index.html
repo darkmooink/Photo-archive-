@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photo Archive</title>
+    <style>
+      :root {
+        --bg: #f5f0e6;
+        --panel: #fffaf2;
+        --text: #2f241d;
+        --muted: #6d5b4d;
+        --accent: #8c4b2f;
+        --accent-2: #c17b47;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Georgia, 'Times New Roman', serif;
+        background: radial-gradient(circle at 10% 10%, #fff3dc, var(--bg) 45%),
+          linear-gradient(120deg, #efe5d2, #f7f1e8);
+        color: var(--text);
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 1.5rem;
+      }
+
+      .card {
+        width: min(760px, 100%);
+        background: color-mix(in srgb, var(--panel) 88%, white);
+        border: 1px solid #eadcc6;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 20px 60px rgba(71, 44, 26, 0.12);
+      }
+
+      h1 {
+        margin: 0 0 0.75rem;
+        font-size: clamp(1.8rem, 3vw, 2.8rem);
+        letter-spacing: 0.01em;
+      }
+
+      p {
+        margin: 0 0 1.25rem;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+
+      .pill {
+        display: inline-block;
+        padding: 0.35rem 0.7rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #fff;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+      }
+
+      .links {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      a {
+        color: #fff;
+        text-decoration: none;
+        background: #5a301e;
+        border-radius: 10px;
+        padding: 0.55rem 0.8rem;
+      }
+
+      a:hover {
+        background: #3f2215;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <span class="pill">Express App Ready</span>
+      <h1>Photo Archive Workspace</h1>
+      <p>
+        The repository structure from the README has been created. Use this web app as a lightweight
+        starting point for archive tooling and metadata workflows.
+      </p>
+      <div class="links">
+        <a href="/api/health">Health API</a>
+        <a href="/api/info">Project Info API</a>
+      </div>
+    </main>
+  </body>
+</html>
