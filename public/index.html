@@ -65,6 +65,7 @@
         display: flex;
         gap: 0.75rem;
         flex-wrap: wrap;
+        margin-bottom: 1.25rem;
       }
 
       a {
@@ -77,6 +78,49 @@
 
       a:hover {
         background: #3f2215;
+      }
+
+      .uploader {
+        border: 1px solid #eadcc6;
+        border-radius: 12px;
+        padding: 1rem;
+        background: #fff;
+      }
+
+      .uploader label {
+        display: block;
+        margin-bottom: 0.45rem;
+        font-weight: 700;
+        color: #463224;
+      }
+
+      .uploader input,
+      .uploader button {
+        font: inherit;
+      }
+
+      .uploader input[type='file'] {
+        width: 100%;
+        margin-bottom: 0.8rem;
+      }
+
+      .uploader button {
+        border: 0;
+        border-radius: 10px;
+        padding: 0.6rem 1rem;
+        background: #5a301e;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .uploader button:hover {
+        background: #3f2215;
+      }
+
+      .result {
+        margin-top: 0.9rem;
+        color: var(--muted);
+        white-space: pre-wrap;
       }
     </style>
   </head>
@@ -92,6 +136,55 @@
         <a href="/api/health">Health API</a>
         <a href="/api/info">Project Info API</a>
       </div>
+
+      <form class="uploader" id="uploadForm">
+        <label for="photos">Upload one or more images</label>
+        <input id="photos" name="photos" type="file" accept="image/*" multiple required />
+        <button type="submit">Upload Images</button>
+        <div class="result" id="result"></div>
+      </form>
     </main>
+
+    <script>
+      const form = document.getElementById('uploadForm');
+      const fileInput = document.getElementById('photos');
+      const result = document.getElementById('result');
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        if (!fileInput.files.length) {
+          result.textContent = 'Please choose at least one image.';
+          return;
+        }
+
+        const data = new FormData();
+        for (const file of fileInput.files) {
+          data.append('photos', file);
+        }
+
+        result.textContent = 'Uploading...';
+
+        try {
+          const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: data
+          });
+
+          const payload = await response.json();
+          if (!response.ok) {
+            result.textContent = `Upload failed: ${payload.error || 'Unknown error'}`;
+            return;
+          }
+
+          result.textContent = `Uploaded ${payload.count} file(s):\n${payload.files
+            .map((f) => `${f.originalName} -> ${f.storedName}`)
+            .join('\n')}`;
+          form.reset();
+        } catch (_err) {
+          result.textContent = 'Network error while uploading files.';
+        }
+      });
+    </script>
   </body>
 </html>
