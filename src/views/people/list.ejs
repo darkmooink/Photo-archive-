@@ -1,0 +1,28 @@
+<%- include('../partials/header', { title: title, inboxCount: inboxCount }) %>
+
+<div class="page-header">
+  <h1>People</h1>
+  <a href="/people/new" class="btn btn-primary">+ New Person</a>
+</div>
+
+<% if (people.length === 0) { %>
+  <div class="empty-state"><p>No people yet. <a href="/people/new">Add someone</a>.</p></div>
+<% } else { %>
+  <ul class="people-list">
+    <% people.forEach(function(person) { %>
+      <li class="person-item">
+        <a href="/people/<%= person.id %>" class="person-name"><%= person.name %></a>
+        <span class="photo-count"><%= person.photo_count %> photo<%= person.photo_count !== 1 ? 's' : '' %></span>
+        <div class="item-actions">
+          <a href="/people/<%= person.id %>/edit" class="btn btn-sm btn-secondary">Edit</a>
+          <form action="/people/<%= person.id %>?_method=DELETE" method="POST" style="display:inline"
+                onsubmit="return confirm('Delete <%= person.name %>?')">
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<%- include('../partials/footer') %>

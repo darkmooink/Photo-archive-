@@ -1,0 +1,35 @@
+<%- include('../partials/header', { title: title, inboxCount: inboxCount }) %>
+
+<div class="page-header">
+  <h1>Upload Photo</h1>
+</div>
+
+<% if (error) { %>
+  <div class="alert alert-error"><%= error %></div>
+<% } %>
+
+<form action="/photos/upload" method="POST" enctype="multipart/form-data" class="form">
+  <div class="form-group">
+    <label for="photo">Photo File *</label>
+    <input type="file" id="photo" name="photo" accept="image/*" required>
+  </div>
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" placeholder="Optional title">
+  </div>
+  <div class="form-group">
+    <label for="source_type">Source Type</label>
+    <select id="source_type" name="source_type">
+      <option value="">-- Select --</option>
+      <option value="print">Print</option>
+      <option value="scan">Scan</option>
+      <option value="digital">Digital</option>
+    </select>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Upload & Process</button>
+    <a href="/photos" class="btn btn-secondary">Cancel</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>

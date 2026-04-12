@@ -1,0 +1,42 @@
+<%- include('../partials/header', { title: title, inboxCount: inboxCount }) %>
+
+<div class="page-header">
+  <h1><%= person.name %></h1>
+  <div class="header-actions">
+    <a href="/people/<%= person.id %>/edit" class="btn btn-secondary">Edit</a>
+    <form action="/people/<%= person.id %>?_method=DELETE" method="POST" style="display:inline"
+          onsubmit="return confirm('Delete this person?')">
+      <button class="btn btn-danger">Delete</button>
+    </form>
+  </div>
+</div>
+
+<% if (person.notes) { %>
+  <p class="notes"><%= person.notes %></p>
+<% } %>
+
+<h2>Photos (<%= photos.length %>)</h2>
+
+<% if (photos.length === 0) { %>
+  <div class="empty-state"><p>No photos tagged with this person.</p></div>
+<% } else { %>
+  <div class="photo-grid">
+    <% photos.forEach(function(photo) { %>
+      <a href="/photos/<%= photo.id %>" class="photo-card">
+        <div class="photo-thumb">
+          <% if (photo.clean_path) { %>
+            <img src="/processed/<%= require('path').basename(photo.clean_path) %>" alt="<%= photo.title || photo.filename %>">
+          <% } else { %>
+            <img src="/uploads/<%= photo.filename %>" alt="<%= photo.title || photo.filename %>">
+          <% } %>
+        </div>
+        <div class="photo-card-info">
+          <p class="photo-title"><%= photo.title || photo.filename %></p>
+          <span class="status-badge status-<%= photo.status %>"><%= photo.status.replace('_', ' ') %></span>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>
